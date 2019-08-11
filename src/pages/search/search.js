@@ -3,6 +3,29 @@ import './search.less';
 import { post } from '../../tools/request';
 import Sortable from 'sortablejs';
 let sortable;
+
+function init() {
+    post('https://www.mzaysd.com/api/user.php?act=load&teacherid=35').then((res) => {
+        listData(res.info);
+    }).catch(e => {
+        const tempData = [
+            { id: '1', title: '随机文字1' },
+            { id: '2', title: '随机文字2' },
+            { id: '3', title: '随机文字3' },
+            { id: '4', title: '随机文字4' },
+            { id: '5', title: '随机文字5' },
+            { id: '6', title: '随机文字6' },
+            { id: '7', title: '随机文字7' },
+            { id: '8', title: '随机文字8' },
+            { id: '9', title: '随机文字9' },
+            { id: '10', title: '随机文字10' },
+            { id: '11', title: '随机文字11' }
+        ];
+        listData(tempData);
+        console.log(e);
+    });
+}
+
 function searchLib() {
     const val = document.getElementById('search').value;
     if (val) {
@@ -21,6 +44,7 @@ function listData(data) {
         console.log(data[i]);
         items += `<li class="item" data-id="${data[i].id}">
             <div class="lesson-name">${data[i].title}</div>
+            <button class="item-del">删除</button>
         </li>`;
     }
     if (sortable && sortable.el) {
@@ -60,25 +84,26 @@ function clearItems() {
 
 }
 
+function delItem(el) {
+    let lessons = document.getElementById('lessons');
+    lessons.removeChild(el);
+    if (sortable) {
+        sortable.destroy();
+    }
+    sortable = Sortable.create(lessons);
+}
+
 window.onload = () => {
     document.getElementById('search-btn').addEventListener('click', searchLib);
     document.getElementById('save-btn').addEventListener('click', saveItem);
     document.getElementById('clear-btn').addEventListener('click', clearItems);
-
-    const tempData = [
-        { id: '1', title: '随机文字1' },
-        { id: '2', title: '随机文字2' },
-        { id: '3', title: '随机文字3' },
-        { id: '4', title: '随机文字4' },
-        { id: '5', title: '随机文字5' },
-        { id: '6', title: '随机文字6' },
-        { id: '7', title: '随机文字7' },
-        { id: '8', title: '随机文字8' },
-        { id: '9', title: '随机文字9' },
-        { id: '10', title: '随机文字10' },
-        { id: '11', title: '随机文字11' }
-    ];
-    listData(tempData);
+    document.getElementById('lessons').addEventListener('click', (e) => {
+        console.log(e);
+        if (e.target.tagName === 'BUTTON') {
+            delItem(e.target.parentElement);
+        }
+    });
+    init();
 
     // console.log(sortable);
 };
