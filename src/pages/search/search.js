@@ -1,29 +1,15 @@
 import '../../common/css/com.less';
 import './search.less';
 import { post } from '../../tools/request';
-
+import Sortable from 'sortablejs';
+let sortable;
 function searchLib() {
     const val = document.getElementById('search').value;
     if (val) {
-        post('https://www.baidu.com').then((res) => {
-            // console.log(res);
-            listData(res);
+        post(`https://www.mzaysd.com/api/user.php?act=search&query=${val}`).then((res) => {
+            console.log(res);
+            listData(res.info);
         }).catch(e => {
-            const tempData = [
-                { id: '1', value: '随机文字1' },
-                { id: '2', value: '随机文字2' },
-                { id: '3', value: '随机文字3' },
-                { id: '4', value: '随机文字4' },
-                { id: '5', value: '随机文字5' },
-                { id: '6', value: '随机文字6' },
-                { id: '7', value: '随机文字7' },
-                { id: '8', value: '随机文字8' },
-                { id: '9', value: '随机文字9' },
-                { id: '10', value: '随机文字10' },
-                { id: '11', value: '随机文字11' }
-            ];
-            listData(tempData);
-
             console.log(e);
         });
     }
@@ -32,33 +18,67 @@ function searchLib() {
 function listData(data) {
     let items = '';
     for (let i = 0; i < data.length; i++) {
-        console.log(data[i])
-        items += `<li class="item">
-            <div class="lesson-name">${data[i].value}</div>
-            <button class="item-add" data-lessonid="${data[i].id}">保存</button>
+        console.log(data[i]);
+        items += `<li class="item" data-id="${data[i].id}">
+            <div class="lesson-name">${data[i].title}</div>
         </li>`;
     }
-
-    document.getElementById('lessons').innerHTML = items;
+    if (sortable && sortable.el) {
+        sortable.destroy();
+    }
+    document.getElementById('lessons').innerHTML += items;
+    const el = document.getElementById('lessons');
+    sortable = Sortable.create(el);
 }
 
-function saveItem(id) {
-    console.log(id);
-    post('https://sit2.hnzycfc.com/test', {
-        id
+function saveItem() {
+    console.log(sortable.toArray());
+
+    const lessons = {
+        teacherid: '34',
+        ids: sortable.toArray().join(',')
+    };
+    const formdata = new FormData();
+    for (let key in lessons) {
+        formdata.append(key, lessons[key]);
+    }
+    post('https://www.mzaysd.com/api/user.php?act=save_lesson', {
+        body: formdata
     }).then(res => {
         console.log(res);
     }).catch(e => {
         console.log(e);
     });
 }
+function clearItems() {
+    if (confirm('您确定要清空列表吗')) {
+        if (sortable) {
+            sortable.destroy();
+        }
+        document.getElementById('lessons').innerHTML = '';
+    }
+
+}
 
 window.onload = () => {
     document.getElementById('search-btn').addEventListener('click', searchLib);
-    document.getElementById('lessons').addEventListener('click', (e) => {
-        console.log(e);
-        if (e.target.tagName === 'BUTTON') {
-            saveItem(e.target.dataset.lessonid);
-        }
-    });
+    document.getElementById('save-btn').addEventListener('click', saveItem);
+    document.getElementById('clear-btn').addEventListener('click', clearItems);
+
+    const tempData = [
+        { id: '1', title: '随机文字1' },
+        { id: '2', title: '随机文字2' },
+        { id: '3', title: '随机文字3' },
+        { id: '4', title: '随机文字4' },
+        { id: '5', title: '随机文字5' },
+        { id: '6', title: '随机文字6' },
+        { id: '7', title: '随机文字7' },
+        { id: '8', title: '随机文字8' },
+        { id: '9', title: '随机文字9' },
+        { id: '10', title: '随机文字10' },
+        { id: '11', title: '随机文字11' }
+    ];
+    listData(tempData);
+
+    // console.log(sortable);
 };
