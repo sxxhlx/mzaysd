@@ -69,4 +69,5 @@ function delItem(el) {
 window.onload = () => {
     document.getElementById('save-btn').addEventListener('click', saveItem);
     document.getElementById('clear-btn').addEventListener('click', clearItems);
+    init();
 };
