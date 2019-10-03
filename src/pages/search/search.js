@@ -7,6 +7,7 @@ let sortable;
 function init() {
     post('https://www.mzaysd.com/api/user.php?act=load&teacherid=35').then((res) => {
         listData(res.info);
+        document.getElementById('btn-info').innerHTML = res.key;
     }).catch(e => {
         const tempData = [
             { id: '1', title: '随机文字1' },
@@ -59,7 +60,7 @@ function saveItem() {
     console.log(sortable.toArray());
 
     const lessons = {
-        teacherid: '34',
+        teacherid: window.TEACHER_ID,
         ids: sortable.toArray().join(',')
     };
     const formdata = new FormData();
