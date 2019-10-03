@@ -137,12 +137,71 @@ table {
 
 .list {
     width: 100%;
+    padding-bottom: 200px;
 }
 
 .item {
     height: 10vw;
     line-height: 10vw;
     border-bottom: 1px solid #e6e6e6;
+    position: relative;
+}
+
+.item-del {
+    width: 100px;
+    height: 60px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    border-radius: 5px;
+    border: 1px solid #e6e6e6;
+    text-align: center;
+    line-height: 60px;
+    background: red;
+    color: #ffffff;
+}
+
+
+.item-add {
+    width: 100px;
+    height: 60px;
+    position: absolute;
+    right: 16px;
+    bottom: 16px;
+    border-radius: 5px;
+    border: 1px solid #e6e6e6;
+    text-align: center;
+    line-height: 60px;
+    background: green;
+    color: #ffffff;
+}
+
+.options {
+    height: 120px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.5);
+    align-items: center;
+    padding: 0 16px;
+    background: #ffffff;
+
+    button {
+        height: 80px;
+        line-height: 80px;
+        text-align: center;
+        background: green;
+        width: 150px;
+        color: #ffffff;
+        border-radius: 10px;
+    }
+
+    #clear-btn {
+        background: red;
+    }
 }
 
 .lesson-name {
