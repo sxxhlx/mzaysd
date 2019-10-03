@@ -66,8 +66,31 @@ function delItem(el) {
     sortable = Sortable.create(lessons);
 }
 
+function listData(data) {
+    let items = '';
+    for (let i = 0; i < data.length; i++) {
+        console.log(data[i]);
+        items += `<li class="item" data-id="${data[i].id}">
+            <div class="lesson-name">${data[i].title}</div>
+            <button class="item-del">删除</button>
+        </li>`;
+    }
+    if (sortable && sortable.el) {
+        sortable.destroy();
+    }
+    document.getElementById('lessons').innerHTML += items;
+    const el = document.getElementById('lessons');
+    sortable = Sortable.create(el);
+}
+
 window.onload = () => {
     document.getElementById('save-btn').addEventListener('click', saveItem);
     document.getElementById('clear-btn').addEventListener('click', clearItems);
+    document.getElementById('lessons').addEventListener('click', (e) => {
+        console.log(e);
+        if (e.target.tagName === 'BUTTON') {
+            delItem(e.target.parentElement);
+        }
+    });
     init();
 };
