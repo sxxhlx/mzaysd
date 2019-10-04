@@ -9,6 +9,30 @@ let currentSelected = [],
     displayData = [];
 
 function init() {
+    initData();
+    initOptions();
+}
+
+function initOptions() {
+    // todo 初始化选项接口
+    post(`https://www.mzaysd.com/api/user.php?act=loadOptions&teacherid=${window.TEACHER_ID}`).then((res) => {
+        if (res.key) {
+            document.getElementById('btn-info').innerHTML = res.key;
+        }
+        if (res.info) {
+            let options;
+            for (let i = 0; i < res.info.length; i++) {
+                options += `<option value="${res.info[i].cat_id}">${res.info[i].cat_name}</option>`;
+            }
+            document.getElementById('category').innerHTML = options;
+        }
+    }).catch(e => {
+        console.log(e);
+        alert(e);
+    });
+}
+
+function initData() {
     post(`https://www.mzaysd.com/api/user.php?act=load&teacherid=${window.TEACHER_ID}`).then((res) => {
         if (res.key) {
             document.getElementById('btn-info').innerHTML = res.key;
@@ -25,10 +49,27 @@ function init() {
     });
 }
 
+function searchBySelect(e) {
+    console.log(e);
+    // TODO
+    const val = document.getElementById('search').value;
+
+    if (e.target.value || val) {
+        post(`https://www.mzaysd.com/api/user.php?act=search&query=${e.target.value}`).then((res) => {
+            console.log(res);
+            listData(res.info);
+            displayData = res.info;
+        }).catch(e => {
+            console.log(e);
+        });
+    }
+}
+
 function searchLib() {
     const val = document.getElementById('search').value;
+    const cat = document.getElementById('category').value;
     if (val) {
-        post(`https://www.mzaysd.com/api/user.php?act=search&query=${val}`).then((res) => {
+        post(`https://www.mzaysd.com/api/user.php?act=search&query=${val}&cat=${cat}`).then((res) => {
             console.log(res);
             listData(res.info);
             displayData = res.info;
@@ -94,12 +135,12 @@ function removeFromCart(el) {
 
 window.onload = () => {
     document.getElementById('search-btn').addEventListener('click', searchLib);
-
+    document.getElementById('category').addEventListener('change', searchBySelect);
     document.getElementById('lessons').addEventListener('click', (e) => {
         console.log(e);
         if (e.target.tagName === 'BUTTON') {
             toggleSelect(e.target.parentElement).then(() => {
-                init();
+                initData();
             }).catch(e => {
                 alert(e);
             });
