@@ -6,7 +6,7 @@ let sortable;
 
 function init() {
     // TODO : to correct api url
-    post('https://www.mzaysd.com/api/user.php?act=cart&teacherid=35').then((res) => {
+    post(`https://www.mzaysd.com/api/user.php?act=cart&teacherid=${window.TEACHER_ID}`).then((res) => {
         listData(res.info);
         document.getElementById('btn-info').innerHTML = res.key;
     }).catch(e => {

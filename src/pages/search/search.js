@@ -10,10 +10,11 @@ let currentSelected = [],
 
 function init() {
     initData();
-    initOptions();
+    // initOptions();
 }
 
-function initOptions() {
+// option 不从接口获取
+/* function initOptions() {
     // todo 初始化选项接口
     post(`https://www.mzaysd.com/api/user.php?act=loadOptions&teacherid=${window.TEACHER_ID}`).then((res) => {
         if (res.key) {
@@ -30,7 +31,7 @@ function initOptions() {
         console.log(e);
         alert(e);
     });
-}
+} */
 
 function initData() {
     post(`https://www.mzaysd.com/api/user.php?act=load&teacherid=${window.TEACHER_ID}`).then((res) => {
@@ -54,8 +55,8 @@ function searchBySelect(e) {
     // TODO
     const val = document.getElementById('search').value;
 
-    if (e.target.value || val) {
-        post(`https://www.mzaysd.com/api/user.php?act=search&query=${e.target.value}`).then((res) => {
+    if (e.target.value) {
+        post(`https://www.mzaysd.com/api/user.php?act=category&cat_id=${e.target.value}&query=${val}`).then((res) => {
             console.log(res);
             listData(res.info);
             displayData = res.info;
@@ -69,7 +70,7 @@ function searchLib() {
     const val = document.getElementById('search').value;
     const cat = document.getElementById('category').value;
     if (val) {
-        post(`https://www.mzaysd.com/api/user.php?act=search&query=${val}&cat=${cat}`).then((res) => {
+        post(`https://www.mzaysd.com/api/user.php?act=search&query=${val}&cat_id=${cat}`).then((res) => {
             console.log(res);
             listData(res.info);
             displayData = res.info;
@@ -89,7 +90,7 @@ function listData(data) {
                 <div class="word-name">${data[i].title.split(' ')[0]}</div>
                 <div class="desc">${data[i].title.split(' ')[1]}</div>
             </div>
-            ${currentSelected.indexOf(data[i].id) < 0 ? '<button class="item-add">添加</button>' : '<button class="item-add">移除</button>'}
+            ${currentSelected.indexOf(data[i].id) < 0 ? '<button class="item-add">添加</button>' : '<button class="item-added">已添加</button>'}
         </li>`;
     }
     document.getElementById('lessons').innerHTML = items;
@@ -104,10 +105,8 @@ function toggleSelect(el) {
 }
 
 function addToCart(el) {
-    console.log(el);
-    post('https://www.mzaysd.com/api/user.php?act=save_byid', {
-        id: el.dataset.id
-    }).then(res => {
+    // console.log(el);
+    post(`https://www.mzaysd.com/api/user.php?act=add&teacher_id=${window.TEACHER_ID}&lessonid=${el.dataset.id}`).then(res => {
         console.log(res);
         alert('已添加至课表');
         return Promise.resolve();
@@ -120,7 +119,8 @@ function addToCart(el) {
 
 function removeFromCart(el) {
     console.log(el);
-    post('https://www.mzaysd.com/api/user.php?act=del_byid', {
+    // 如果需要从搜索页删除的话，从这里删除
+    /*  post('https://www.mzaysd.com/api/user.php?act=del_byid', {
         id: el.dataset.id
     }).then(res => {
         console.log(res);
@@ -130,7 +130,7 @@ function removeFromCart(el) {
         console.log(e);
         return Promise.reject(e);
 
-    });
+    }); */
 }
 
 window.onload = () => {
