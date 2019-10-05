@@ -43,6 +43,7 @@ function saveItem() {
         body: formdata
     }).then(res => {
         console.log(res);
+        document.getElementById('btn-info').innerHTML = res.key;
     }).catch(e => {
         console.log(e);
     });

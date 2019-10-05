@@ -85,7 +85,7 @@ function listData(data) {
     for (let i = 0; i < data.length; i++) {
         console.log(data[i]);
         items += `<li class="video-item" data-id="${data[i].id}">
-            <img class="thumb" src="${data[i].thumb}" alt="${data[i].title}" />
+            <img class="thumb" src="${data[i].images}" alt="${data[i].title}" />
             <div class="word">
                 <div class="word-name">${data[i].title.split(' ')[0]}</div>
                 <div class="desc">${data[i].title.split(' ')[1]}</div>
