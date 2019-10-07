@@ -11,8 +11,6 @@ let currentSelected = [],
 function init() {
     initData();
     // initOptions();
-    const tempdata = [{ "id": "782", "title": "budgie \u76f8\u601d\u9e66\u9e49", "images": "\/attachment\/images\/2\/2019\/09\/K31RH2Vhfz2P24VQbheQEzRP2ByL3F.jpg", "videourl": "https:\/\/www.mzaysd.com\/attachment\/chaifen\/xiaoxue1\/AVSEQ02.mp4" }];
-    listData(tempdata);
 }
 
 // option 不从接口获取
@@ -47,7 +45,7 @@ function initData() {
             }
             document.getElementById('lessons-count').innerHTML = res.info.length;
         }
-        // listData(displayData);
+        listData(displayData);
 
     }).catch(e => {
         console.log(e);
