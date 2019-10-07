@@ -139,7 +139,7 @@ function removeFromCart(el) {
 
 function initVideo(el) {
     const videoUrl = el.dataset.videourl;
-    const videoEl = `<video src="${videoUrl}" autoplay></video>
+    const videoEl = `<video x-webkit-airplay="true" webkit-playsinline="true" x5-playsinline="true" playsinline="true" src="${videoUrl}" autoplay></video>
         <div class="video-close">关闭视频</div>`;
     let videoContainer = document.createElement('div');
     videoContainer.className = 'video-layer';
