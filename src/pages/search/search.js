@@ -11,6 +11,8 @@ let currentSelected = [],
 function init() {
     initData();
     // initOptions();
+    const tempdata = [{ "id": "782", "title": "budgie \u76f8\u601d\u9e66\u9e49", "images": "\/attachment\/images\/2\/2019\/09\/K31RH2Vhfz2P24VQbheQEzRP2ByL3F.jpg", "videourl": "https:\/\/www.mzaysd.com\/attachment\/chaifen\/xiaoxue1\/AVSEQ02.mp4" }];
+    listData(tempdata);
 }
 
 // option 不从接口获取
@@ -34,6 +36,7 @@ function init() {
 } */
 
 function initData() {
+
     post(`https://www.mzaysd.com/api/user.php?act=load&teacherid=${window.TEACHER_ID}`).then((res) => {
         if (res.key) {
             document.getElementById('btn-info').innerHTML = res.key;
@@ -42,8 +45,10 @@ function initData() {
             for (let i = 0; i < res.info.length; i++) {
                 currentSelected.push(res.info[i].id);
             }
-            listData(displayData);
+            document.getElementById('lessons-count').innerHTML = res.info.length;
         }
+        // listData(displayData);
+
     }).catch(e => {
         console.log(e);
         alert(e);
@@ -84,7 +89,7 @@ function listData(data) {
     let items = '';
     for (let i = 0; i < data.length; i++) {
         console.log(data[i]);
-        items += `<li class="video-item" data-id="${data[i].id}">
+        items += `<li class="video-item" data-videourl="${data[i].videourl}" data-id="${data[i].id}">
             <img class="thumb" src="${data[i].images}" alt="${data[i].title}" />
             <div class="word">
                 <div class="word-name">${data[i].title.split(' ')[0]}</div>
@@ -108,11 +113,12 @@ function addToCart(el) {
     // console.log(el);
     post(`https://www.mzaysd.com/api/user.php?act=add&teacher_id=${window.TEACHER_ID}&lessonid=${el.dataset.id}`).then(res => {
         console.log(res);
-        alert('已添加至课表');
-        return Promise.resolve();
+        // alert('已添加至课表');
+        // return Promise.resolve();
+        initData();
     }).catch(e => {
         console.log(e);
-        return Promise.reject(e);
+        // return Promise.reject(e);
 
     });
 }
@@ -133,18 +139,33 @@ function removeFromCart(el) {
     }); */
 }
 
+function initVideo(el) {
+    const videoUrl = el.dataset.videourl;
+    const videoEl = `<video src="${videoUrl}" autoplay></video>
+        <div class="video-close">关闭视频</div>`;
+    let videoContainer = document.createElement('div');
+    videoContainer.className = 'video-layer';
+    videoContainer.innerHTML += videoEl;
+    document.querySelector('body').appendChild(videoContainer);
+}
+
 window.onload = () => {
     document.getElementById('search-btn').addEventListener('click', searchLib);
     document.getElementById('category').addEventListener('change', searchBySelect);
     document.getElementById('lessons').addEventListener('click', (e) => {
         console.log(e);
         if (e.target.tagName === 'BUTTON') {
-            toggleSelect(e.target.parentElement).then(() => {
-                initData();
-            }).catch(e => {
-                alert(e);
-            });
+            toggleSelect(e.target.parentElement);
+        }
+        if (e.target.tagName === 'IMG') {
+            initVideo(e.target.parentElement);
+        }
+    });
+    document.getElementById('body').addEventListener('click', (e) => {
+        if (e.target.className === 'video-close') {
+            document.querySelector('.video-layer').remove();
         }
     });
     init();
 };
+
