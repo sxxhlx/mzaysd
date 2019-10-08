@@ -36,9 +36,6 @@ function init() {
 function initData() {
 
     post(`https://www.mzaysd.com/api/user.php?act=load&teacherid=${window.TEACHER_ID}`).then((res) => {
-        if (res.key) {
-            document.getElementById('btn-info').innerHTML = res.key;
-        }
         if (res.info) {
             for (let i = 0; i < res.info.length; i++) {
                 currentSelected.push(res.info[i].id);
