@@ -2,6 +2,29 @@ import 'whatwg-fetch';
 import 'abortcontroller-polyfill/dist/polyfill-patch-fetch';
 
 const requests = {};
+(function () {
+    if (typeof Promise.prototype.finally !== 'function') {
+        var onfinally = function onfinally(callback) {
+            var P = this.constructor;
+            return this.then(function (value) {
+                return P.resolve(callback()).then(function () {
+                    return value;
+                });
+            }, function (reason) {
+                return P.resolve(callback()).then(function () {
+                    throw reason;
+                });
+            });
+        };
+        Object.defineProperty(Promise.prototype, 'finally', {
+            value: onfinally
+        });
+    }
+})();
+
+
+
+
 
 function removeRequest(name) {
     requests[name] && delete requests[name];

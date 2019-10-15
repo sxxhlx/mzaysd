@@ -90,7 +90,7 @@ function listData(data) {
                 <div class="word-name">${data[i].title.split(' ')[0]}</div>
                 <div class="desc">${data[i].title.split(' ')[1]}</div>
             </div>
-            ${currentSelected.indexOf(data[i].id) < 0 ? '<button class="item-add">添加</button>' : '<button class="item-added">已添加</button>'}
+            ${currentSelected.indexOf(data[i].id) < 0 ? '<button class="item-add">添加</button>' : '<button class="item-del">取消添加</button>'}
         </li>`;
     }
     document.getElementById('lessons').innerHTML = items;
@@ -121,17 +121,15 @@ function addToCart(el) {
 function removeFromCart(el) {
     console.log(el);
     // 如果需要从搜索页删除的话，从这里删除
-    /*  post('https://www.mzaysd.com/api/user.php?act=del_byid', {
-        id: el.dataset.id
-    }).then(res => {
+    post(`https://www.mzaysd.com/api/user.php?act=add&teacher_id=${window.TEACHER_ID}&lessonid=${el.dataset.id}`).then(res => {
         console.log(res);
-        alert('已从课表中移除');
-        return Promise.resolve();
+        initData();
+
     }).catch(e => {
         console.log(e);
-        return Promise.reject(e);
+        // return Promise.reject(e);
 
-    }); */
+    });
 }
 
 function initVideo(el) {
