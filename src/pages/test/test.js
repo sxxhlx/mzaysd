@@ -60,14 +60,14 @@ function clearItems() {
 }
 
 function delItem(el) {
-    console.log(el);
+    console.log('element is ======>', el);
     let lessons = document.getElementById('lessons');
-    console.log('lessons===', lessons);
+    console.log('lessons are ======>', lessons);
     lessons.removeChild(el);
-    console.log('el removed success===');
+    console.log('===el removed success===');
     if (sortable) {
         sortable.destroy();
-        console.log('destroy success===');
+        console.log('===destroy success===');
     }
     sortable = Sortable.create(lessons);
 }
@@ -93,7 +93,7 @@ window.onload = () => {
     document.getElementById('save-btn').addEventListener('click', saveItem);
     document.getElementById('clear-btn').addEventListener('click', clearItems);
     document.getElementById('lessons').addEventListener('click', (e) => {
-        console.log(e);
+        console.log('event is =======> ', e);
         if (e.target.tagName === 'BUTTON') {
             console.log('event triggerd===');
             delItem(e.target.parentElement);
