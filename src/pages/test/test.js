@@ -94,7 +94,7 @@ window.onload = () => {
     document.getElementById('clear-btn').addEventListener('click', clearItems);
     document.getElementById('lessons').addEventListener('click', (e) => {
         console.log('event is =======> ', e);
-        if (e.target.tagName === 'BUTTON') {
+        if (e.target.tagName === 'BUTTON' || e.target.tagName === 'button') {
             console.log('event triggerd===');
             delItem(e.target.parentElement);
         }

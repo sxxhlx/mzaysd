@@ -187,7 +187,7 @@ if (pageConfig && Array.isArray(pageConfig)) {
             inlineSource: '.(js|css)$',
             // minify:false,
             minify: {
-                removeComments: true,
+                removeComments: false,
                 collapseWhitespace: true,
                 removeAttributeQuotes: true
                 // more options:
