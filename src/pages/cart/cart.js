@@ -2,7 +2,9 @@ import '../../common/css/com.less';
 import './cart.less';
 import { post } from '../../tools/request';
 import Sortable from 'sortablejs';
+import $ from 'jquery';
 let sortable;
+import '../../tools/fastclick';
 
 function init() {
     // TODO : to correct api url
@@ -58,40 +60,58 @@ function clearItems() {
 
 }
 
-function delItem(el) {
+function delItem(index) {
+    // console.log('element is ======>', el);
     let lessons = document.getElementById('lessons');
-    lessons.removeChild(el);
+    // console.log('lessons are ======>', lessons);
+    // lessons.removeChild(document.getElementById(`item-${id}`));
+    // let btns = document.getElementById('btns');
+    // btns.removeChild(document.getElementById(`btn-${id}`));
+    $(`.item:nth-child(${index + 1})`).remove();
+    $(`.item-delete:nth-child(${index + 1})`).remove();
+
+
+    console.log('===el removed success===');
     if (sortable) {
         sortable.destroy();
+        console.log('===destroy success===');
     }
     sortable = Sortable.create(lessons);
 }
 
 function listData(data) {
     let items = '';
+    let btns = '';
     for (let i = 0; i < data.length; i++) {
         console.log(data[i]);
         items += `<li class="item" data-id="${data[i].id}">
             <div class="lesson-name">${data[i].title}</div>
-            <button class="item-del">删除</button>
         </li>`;
+        btns += '<button class="item-delete">删除</button>';
     }
     if (sortable && sortable.el) {
         sortable.destroy();
     }
     document.getElementById('lessons').innerHTML += items;
+    document.getElementById('btns').innerHTML += btns;
     const el = document.getElementById('lessons');
     sortable = Sortable.create(el);
+    $('.item-delete').click(function (e) {
+        // console.log(e.target.dataset);
+        // console.log();
+        delItem($(this).index());
+    });
+
 }
 
 window.onload = () => {
     document.getElementById('save-btn').addEventListener('click', saveItem);
     document.getElementById('clear-btn').addEventListener('click', clearItems);
-    document.getElementById('lessons').addEventListener('click', (e) => {
-        console.log(e);
-        if (e.target.tagName === 'BUTTON') {
-            delItem(e.target.parentElement);
-        }
-    });
+    // document.getElementById('lessons').addEventListener('click', (e) => {
+    //     console.log(e);
+    //     if (e.target.tagName === 'BUTTON') {
+    //         delItem(e.target.parentElement);
+    //     }
+    // });
     init();
 };
